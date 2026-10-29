@@ -13,6 +13,8 @@
  *   1. Writes are legacy (type 0) with an explicit gasPrice — the relay rejects
  *      EIP-1559 fields with a misleading "Insufficient funds" error.
  *   2. Gas limits are fixed, not estimated (the relay reserves gasLimit × gasPrice).
+ *      The gas price is read from the relay per write: its minimum follows the
+ *      HBAR/USD rate (fees are USD-pegged), so a hardcoded price goes stale.
  *   3. A reverted tx still returns a receipt — always check `status`.
  *   4. Never approve uint256 max — HTS rejects it. We approve the exact amount.
  *   5. HBARX must be associated to receive a withdrawal → `canReceiveHbarx`.
@@ -114,8 +116,8 @@ export const AYHBAR_VAULT: HbarVaultConfig = {
 
 const MIRROR_URL = 'https://mainnet.mirrornode.hedera.com';
 
-/** From the SDK's `GAS` (measured on mainnet, with headroom). 114 tinybar/gas in weibar. */
-const GAS_PRICE = BigInt(1_140_000_000_000);
+/** Floor gas price: the SDK's 114 tinybar/gas, in weibar. Limits are from its `GAS` (measured on mainnet, with headroom). */
+const MIN_GAS_PRICE = BigInt(1_140_000_000_000);
 const GAS_APPROVE = BigInt(900_000);
 const GAS_DEPOSIT = BigInt(900_000);
 const GAS_WITHDRAW = BigInt(900_000);
@@ -258,7 +260,12 @@ function requireAccount(walletClient: WalletClient): Wallet {
   return { ...wc, writeContract };
 }
 
-const legacy = (gas: bigint) => ({ type: 'legacy' as const, gasPrice: GAS_PRICE, gas });
+/** Legacy tx fields priced off the relay's current minimum + 20%, never below the floor. */
+async function legacy(client: PublicClient, gas: bigint) {
+  const relay = await client.getGasPrice().catch(() => MIN_GAS_PRICE);
+  const padded = ((relay * BigInt(12)) / BigInt(10) / TINYBAR) * TINYBAR;
+  return { type: 'legacy' as const, gasPrice: padded > MIN_GAS_PRICE ? padded : MIN_GAS_PRICE, gas };
+}
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function settle(client: PublicClient, hash: Hash, what: string) {
@@ -295,7 +302,7 @@ export async function hbarDeposit(
       functionName: 'depositHBAR',
       args: [receiver, minAssetsOut],
       value,
-      ...legacy(GAS_DEPOSIT),
+      ...(await legacy(client, GAS_DEPOSIT)),
     });
   } else {
     onStep?.('approving');
@@ -314,7 +321,7 @@ export async function hbarDeposit(
         abi: ERC20_ABI,
         functionName: 'approve',
         args: [cfg.vault, amount],
-        ...legacy(GAS_APPROVE),
+        ...(await legacy(client, GAS_APPROVE)),
       });
       await settle(client, approveHash, 'Approval');
       await sleep(4000); // the relay lags the mined nonce
@@ -324,7 +331,7 @@ export async function hbarDeposit(
       ...base,
       functionName: 'deposit',
       args: [amount, receiver],
-      ...legacy(GAS_DEPOSIT),
+      ...(await legacy(client, GAS_DEPOSIT)),
     });
   }
 
@@ -348,7 +355,7 @@ export async function hbarRequestWithdraw(
     abi: HBAR_VAULT_ABI,
     functionName: 'requestWithdraw',
     args: [shares],
-    ...legacy(GAS_WITHDRAW),
+    ...(await legacy(client, GAS_WITHDRAW)),
   });
   await settle(client, txHash, 'Withdrawal request');
   return { txHash };
@@ -363,7 +370,7 @@ export async function hbarCancelRequest(walletClient: WalletClient, client: Publ
     address: cfg.vault,
     abi: HBAR_VAULT_ABI,
     functionName: 'cancelWithdrawRequest',
-    ...legacy(GAS_WITHDRAW),
+    ...(await legacy(client, GAS_WITHDRAW)),
   });
   await settle(client, txHash, 'Cancel');
   return { txHash };
@@ -385,7 +392,7 @@ export async function hbarRedeem(
     abi: HBAR_VAULT_ABI,
     functionName: 'redeem',
     args: [shares, receiver, wc.account.address],
-    ...legacy(GAS_WITHDRAW),
+    ...(await legacy(client, GAS_WITHDRAW)),
   });
   const receipt = await settle(client, txHash, 'Withdrawal');
   const [ev] = parseEventLogs({ abi: HBAR_VAULT_ABI, eventName: 'Withdraw', logs: receipt.logs });
