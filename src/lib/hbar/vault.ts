@@ -116,8 +116,8 @@ export const AYHBAR_VAULT: HbarVaultConfig = {
 
 const MIRROR_URL = 'https://mainnet.mirrornode.hedera.com';
 
-/** Floor gas price: the SDK's 114 tinybar/gas, in weibar. Limits are from its `GAS` (measured on mainnet, with headroom). */
-const MIN_GAS_PRICE = BigInt(1_140_000_000_000);
+/** Gas price when the relay won't quote: 140 tinybar/gas in weibar, above every minimum seen (SDK's `GAS_PRICE_FALLBACK_WEI`). Limits are from its `GAS` (measured on mainnet, with headroom). */
+const FALLBACK_GAS_PRICE = BigInt(1_400_000_000_000);
 const GAS_APPROVE = BigInt(900_000);
 const GAS_DEPOSIT = BigInt(900_000);
 const GAS_WITHDRAW = BigInt(900_000);
@@ -260,11 +260,11 @@ function requireAccount(walletClient: WalletClient): Wallet {
   return { ...wc, writeContract };
 }
 
-/** Legacy tx fields priced off the relay's current minimum + 20%, never below the floor. */
+/** Legacy tx fields priced off the relay's current minimum + 20% (the SDK's `gasPriceWei`). */
 async function legacy(client: PublicClient, gas: bigint) {
-  const relay = await client.getGasPrice().catch(() => MIN_GAS_PRICE);
-  const padded = ((relay * BigInt(12)) / BigInt(10) / TINYBAR) * TINYBAR;
-  return { type: 'legacy' as const, gasPrice: padded > MIN_GAS_PRICE ? padded : MIN_GAS_PRICE, gas };
+  const relay = await client.getGasPrice().catch(() => ZERO);
+  const gasPrice = relay > ZERO ? ((relay * BigInt(12)) / BigInt(10) / TINYBAR) * TINYBAR : FALLBACK_GAS_PRICE;
+  return { type: 'legacy' as const, gasPrice, gas };
 }
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -433,6 +433,11 @@ export function hbarErrorMessage(err: unknown): string {
   if (/user rejected|user denied/i.test(msg)) return 'Transaction rejected in wallet';
   if (/nonce too low|nonce is too low/i.test(msg))
     return 'Your wallet is out of sync with the network — wait a few seconds and try again';
+  // A send the relay rejects (e.g. gas price under its minimum) still advances its
+  // cached nonce, so the next send can fail with WRONG_NONCE once; a retry clears it.
+  if (/WRONG_NONCE/i.test(msg)) return 'The Hedera relay is out of sync with your wallet — try again in a few seconds';
+  if (/below configured minimum/i.test(msg))
+    return 'The network gas price just rose above what was quoted — try again';
   if (/exceeds the balance|insufficient funds/i.test(msg)) return 'Insufficient HBAR for this amount plus gas fees';
   if (isUnauthorized(err))
     return "Your wallet hasn't authorized this site to send transactions — disconnect and reconnect it, then try again";
