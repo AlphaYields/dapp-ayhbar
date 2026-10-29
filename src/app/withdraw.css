@@ -1,0 +1,244 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   WITHDRAW MODAL & POSITION-CARD COOLDOWN STYLES
+   Reuses dep-modal-card / dep-pdot / dep-tx-* / dep-suc-* from redesign.css
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── NOTICE SCREEN ───────────────────────────────────────────────────────── */
+.wd-notice-headline {
+  font-size: 23px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.wd-info-block {
+  background: rgba(166, 237, 69, 0.05);
+  border: 1px solid rgba(166, 237, 69, 0.18);
+  border-radius: 12px;
+  padding: 15px 18px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.wd-info-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.wd-info-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.wd-info-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.wd-info-note {
+  font-size: 11.5px;
+  color: rgba(138, 139, 145, 0.5);
+  font-style: italic;
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+/* ── AMOUNT SCREEN — receive panel (the give panel reuses .w-panel) ─────── */
+.wd-rx-panel {
+  background: #232428;
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.wd-rx-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.wd-rx-amt {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── METRICS CARD (estimate / share price) ──────────────────────────────── */
+.wd-metrics-card {
+  background: rgba(166, 237, 69, 0.04);
+  border: 1px solid rgba(166, 237, 69, 0.12);
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin-top: 10px;
+  transition: opacity 200ms ease;
+}
+.wd-mc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+.wd-mc-row + .wd-mc-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.wd-mc-l {
+  font-size: 12px;
+  color: var(--muted);
+}
+.wd-mc-v {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.wd-mc-v.g {
+  color: var(--green);
+  font-weight: 800;
+}
+
+/* ── EXISTING-REQUEST BANNER (shown on amount step) ─────────────────────── */
+.wd-pending-banner {
+  background: rgba(166, 237, 69, 0.06);
+  border: 1px solid rgba(166, 237, 69, 0.18);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--green);
+}
+.wd-pending-banner-sub {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── ERROR BANNER ───────────────────────────────────────────────────────── */
+.wd-error {
+  font-size: 13px;
+  color: #ff6b6b;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ── BACK BUTTON (inline mode) ──────────────────────────────────────────── */
+.wd-back-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 4px;
+}
+
+.wd-apy-badge span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* ── POSITION-CARD COOLDOWN BUTTON STATES ───────────────────────────────── */
+.action-row .btn.wd-cd-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.action-row .btn.wd-cd-pending {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  color: var(--muted);
+  cursor: not-allowed;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  padding-bottom: 7px;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+}
+.action-row .btn.wd-cd-pending:hover {
+  filter: none;
+  transform: none;
+}
+.wd-cd-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--green);
+  border-radius: 0 0 6px 6px;
+  transition: width 1s linear;
+}
+
+.action-row .btn.wd-cd-ready {
+  background: transparent;
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  font-weight: 700;
+  cursor: pointer;
+}
+.action-row .btn.wd-cd-ready:hover {
+  background: rgba(166, 237, 69, 0.08);
+  filter: none;
+  transform: none;
+}
+@keyframes wdGlowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(166, 237, 69, 0);
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(166, 237, 69, 0.3);
+  }
+}
+.action-row .btn.wd-cd-ready.wd-just-ready {
+  animation: wdGlowPulse 0.8s ease-out 1;
+}
+
+/* ── REDEEM CONFIRM MODAL (single-step, for the post-cooldown click) ────── */
+.wd-confirm-card {
+  background: #2e2f33;
+  border: 1px solid #35363b;
+  border-radius: 18px;
+  padding: 24px 26px;
+}
+.wd-confirm-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.wd-confirm-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+.wd-confirm-success {
+  text-align: center;
+  padding: 8px 0 4px;
+}
+.wd-confirm-success-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.wd-confirm-success-sub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 520px) {
+  .wd-info-block {
+    padding: 13px 14px;
+  }
+}

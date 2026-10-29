@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --page-min-height: calc(100dvh - 80px - 87px - 80px);
+  }
+
+  .dark {
+    --background: 240 4% 15%;
+    --foreground: 0 0% 98%;
+    --card: 240 4% 15%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 4% 18%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 87 100% 60%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 240 4% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 18%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 240 4% 18%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 80% 58%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 87 100% 60%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-[#25262A] text-foreground;
+  }
+}
+
+[data-rk] {
+  pointer-events: auto;
+}
+
+nav [data-rk] button,
+nav [data-rk] [role='button'],
+nav [data-rk] span {
+  font-weight: 400 !important;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 289;
+  }
+  50% {
+    stroke-dashoffset: 72.25;
+  }
+  100% {
+    stroke-dashoffset: 289;
+  }
+}
+
+input.deposit-input::placeholder {
+  color: white;
+  font-size: 32px;
+  font-weight: 500;
+  opacity: 1;
+}
+
+/* ── Site scrollbar (audit-fixes D2) ──────────────────────────────────────
+   Tint the native scrollbar green (lime thumb over a darker green track) while
+   keeping the browser's default width + top/bottom arrow buttons. Set on `*`
+   (these props aren't inherited). We deliberately do NOT set
+   `scrollbar-width: thin` (narrows it + drops the arrows) nor define
+   `::-webkit-scrollbar` (Chromium would then ignore `scrollbar-color`). */
+* {
+  scrollbar-color: rgba(166, 237, 69, 0.45) rgba(166, 237, 69, 0.12);
+}

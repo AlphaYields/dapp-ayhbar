@@ -1,0 +1,30 @@
+{
+  "contracts": {
+    "HBARX": {
+      "address": "0x00000000000000000000000000000000000cbA44",
+      "decimals": 8,
+      "tokenId": "0.0.834116",
+      "note": "Stader HBARX on Hedera (295) — vault.asset() of ayHBAR. HTS token; must be associated to be received."
+    },
+    "ayHBAR_VAULT": {
+      "address": "0x226e4aec419f92e819aed5e8b38efbca56ff3fe9",
+      "decimals": 14,
+      "depositToken": "HBARX",
+      "note": "ayHBAR vault on Hedera mainnet (295), github.com/AlphaYields/hbarx-vault. Verified 2026-10-29: symbol ayHBAR, decimals()=14 (8 + 6 virtual offset), asset()=HBARX. Takes native HBAR (depositHBAR, staked through Stader, staking()=0.0.1412503) or HBARX. Withdrawals: requestWithdraw → redeem after withdrawTimelock, paid in HBARX."
+    }
+  },
+  "chain": {
+    "id": 295,
+    "name": "Hedera",
+    "nativeCurrency": {
+      "name": "HBAR",
+      "symbol": "HBAR",
+      "decimals": 18
+    },
+    "rpcUrl": "https://mainnet.hashio.io/api",
+    "blockExplorer": {
+      "name": "HashScan",
+      "url": "https://hashscan.io/mainnet"
+    }
+  }
+}
