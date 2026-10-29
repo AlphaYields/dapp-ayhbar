@@ -137,12 +137,12 @@ export const AYHBAR: TokenContent = {
     denomination: 'HBARX',
     methodology: 'ERC-4626',
     methodologyLabel: 'Vault standard',
-    netApy: '10.63%',
+    netApy: '0.00%',
     apyLabel: 'Target APY',
   },
   buyBox: {
     sharePrice: '1.029',
-    netApy: '10.63%',
+    netApy: '0.00%',
     maxDrawdown: '—',
     mintLabel: 'Mint ayHBAR',
     subline: '1 HBARX = 1.43563 HBAR',
@@ -160,7 +160,7 @@ export const AYHBAR: TokenContent = {
       {
         key: '7D',
         label: '7-Day APY',
-        apy: '10.4%',
+        apy: '0.0%',
         live: 'apy_7d',
         start: 1.0272,
         end: 1.0292,
@@ -173,7 +173,7 @@ export const AYHBAR: TokenContent = {
       {
         key: '1M',
         label: '30-Day APY',
-        apy: '10.1%',
+        apy: '0.0%',
         live: 'apy_1m',
         start: 1.0208,
         end: 1.0292,
@@ -186,7 +186,7 @@ export const AYHBAR: TokenContent = {
       {
         key: '3M',
         label: '90-Day APY',
-        apy: '9.8%',
+        apy: '0.0%',
         live: 'apy_3m',
         start: 1.006,
         end: 1.0292,
@@ -199,7 +199,7 @@ export const AYHBAR: TokenContent = {
       {
         key: 'ALL',
         label: 'All-Time APY',
-        apy: '9.6%',
+        apy: '0.0%',
         live: 'apy',
         start: 1.0,
         end: 1.0292,

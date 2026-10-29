@@ -7,7 +7,7 @@
       "note": "Stader HBARX on Hedera (295) — vault.asset() of ayHBAR. HTS token; must be associated to be received."
     },
     "ayHBAR_VAULT": {
-      "address": "0x226e4aec419f92e819aed5e8b38efbca56ff3fe9",
+      "address": "0x33ad9057c2e17fa5b4abc119606c9cec97ed85db",
       "decimals": 14,
       "depositToken": "HBARX",
       "note": "ayHBAR vault on Hedera mainnet (295), github.com/AlphaYields/hbarx-vault. Verified 2026-10-29: symbol ayHBAR, decimals()=14 (8 + 6 virtual offset), asset()=HBARX. Takes native HBAR (depositHBAR, staked through Stader, staking()=0.0.1412503) or HBARX. Withdrawals: requestWithdraw → redeem after withdrawTimelock, paid in HBARX."

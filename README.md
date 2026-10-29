@@ -3,7 +3,7 @@
 Web app for **ayHBAR**, the AlphaYields leveraged HBAR staking vault on Hedera.
 Deposit HBAR or HBARX, track your position, and withdraw back to HBARX.
 
-- Vault: [`0x226e4aec419f92e819aed5e8b38efbca56ff3fe9`](https://hashscan.io/mainnet/contract/0x226e4aec419f92e819aed5e8b38efbca56ff3fe9) (Hedera mainnet, chain 295)
+- Vault: [`0x33ad9057c2e17fa5b4abc119606c9cec97ed85db`](https://hashscan.io/mainnet/contract/0x33ad9057c2e17fa5b4abc119606c9cec97ed85db) (Hedera mainnet, chain 295)
 - Asset: Stader HBARX (`0.0.834116`)
 - Vault contracts: [AlphaYields/hbarx-vault](https://github.com/AlphaYields/hbarx-vault)
 

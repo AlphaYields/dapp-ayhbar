@@ -21,7 +21,7 @@ export const VAULTS: Record<VaultSymbol, VaultConfig> = {
     // Hedera mainnet (295). decimals() = 14 on-chain (HBARX 8 + 6 virtual
     // offset), asset() = HBARX — verified 2026-10-29. HBAR deposits are
     // staked to HBARX through Stader by the vault (lib/hbar/vault.ts).
-    address: "0x226e4aec419f92e819aed5e8b38efbca56ff3fe9",
+    address: "0x33ad9057c2e17fa5b4abc119606c9cec97ed85db",
     decimals: 14,
     depositToken: "HBARX",
   },
